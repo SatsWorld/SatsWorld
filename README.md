@@ -1,1 +1,2 @@
-# SATS WORLD
+# SatsWorld
+Own a piece of bitcoin history

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SATS WORLDS - Own a piece of bitcoin history</title>
+    <link rel="stylesheet" href="leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        #map { height: 100vh; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-body-tertiary rounded">
+    <div class="container-fluid ">
+        <a class="navbar-brand" href="#">Sats World</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse justify-content-md-end" id="topNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#countryListModal">COUNTRY LIST</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#faqModal">FAQ</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+</nav>
+<div class="row">
+    <div class="col text-center px-4">
+        <em><span id="countryCount">178 countries</span> • <span id="satsTotal">100,000,000 sats</span> • Own a piece of bitcoin history </em>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="map"></div>
+    </div>
+</div>
+<!-- START FAQ MODAL -->
+<div class="modal fade modal-lg" id="faqModal" aria-labelledby="faqModalStaticBackdropLabel" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="faqModalStaticBackdropLabel">Frequently Asked Questions</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Who</h4>
+                <p>
+                    In the spirit of Satoshi, and publicly owning Bitcoin being a physical risk where I live, just call me Anon. 
+                </p>
+                <h4>Why</h4>
+                <p>
+                    I dreamed of owning a piece of the world, not for power, but to show that anyone, even a kid from a 
+                    small town in a country where he is fortunate to have a computer and internet access, could participate in a global community. 
+                    Bitcoin represented freedom and potential to me. I want to spread the message about this freedom and show that through technology, we could all own a piece of our dreams. 
+                    I want to prove that wealth isn't just about money, but about the dreams we share across borders.
+                </p>
+                <p>
+                    As much as I can benefit from selling the satohis I get from this site, I hope to never have to and someday pass it on to my future children. 
+                    Being that all the country addresses are public, you can track if I move any coins.
+                </p>
+                <h4>What</h4>       
+                <p>
+                    A simple website that allows you to "buy" a country with Bitcoin and own a piece of internet history. 
+                    Owner gets to display a 250 character message, an image file to be used as country's background, and a website link. 
+                    This website will be hosted forever, starting with GitHub and when GitHub goes belly up, I'll find another host.
+                </p>
+                <div class="text-center">
+                    <img src="usa-example.jpg" />
+                </div>
+                <h4>How</h4>
+                <p>What you will need:</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Bitcoin</li>
+                    <li class="list-group-item">GitHub Account</li>
+                  </ul>
+                <p>Three easy steps:</p>
+                <ul class="list-group list-group-flush list-group-numbered">
+                    <li class="list-group-item">Click a country on the map (or from the COUNTRY LIST)</li>
+                    <li class="list-group-item">Click on <b>Buy Now</b> button and send satoshi with your GitHub username as OP_RETURN value</li>
+                    <li class="list-group-item">Create a pull request modifying countries.sats.json to include your message, link url, and upload photo in the comments of pull request.</li>
+                </ul>
+                <p>For more detailed steps, click on any available country.</p>
+                <p><i><b>PS: Please try not to buy a lot of countries - give others an opportunity to contribute.</b></i></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END FAQ MODAL -->
+ <!-- START COUNTRY MODAL -->
+<div class="modal fade modal-md shadow-lg" id="countryModal" style="z-index: 9999;" aria-labelledby="countryModalLabel" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog" style="z-index: 9999;">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="countryModalLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="countryModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END COUNTRY MODAL -->
+<!-- START INSTRUCTION MODAL -->
+<div class="modal fade modal-lg shadow-lg" id="countryInstructionModal" style="z-index: 9999;" aria-labelledby="countryInstructionModalLabel" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog" style="z-index: 9999;">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5"><span id="countryInstructionModalLabel"></span> • Instructions</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Click the "Buy Now" button (<b>or send <span id="countrySats">1234 sats</span> to "<span id="countryAddress">bc1234</span>"</b>) and using a wallet that supports <a href="https://trezor.io/learn/a/use-op_return-in-trezor-suite" target="_blank">OP_RETURN</a>, add your github username. Double check that your username matches exactly - this will be used to verify ownership claim!</p>
+                <p>Once the transaction is confirmed, following the below steps to add your image and personal message link:</p>
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Create pull request</div>
+                        <p>Navigate to the <a href="https://github.com/SatsWorld/SatsWorld/edit/main/countries.sats.json" target="_blank">countries.sats.json</a> file and fork & commit changes to the country you purchased as follows:</p>
+                        <code>
+                            <pre>
+{
+    "id": "AFG",
+    "country": "Afghanistan",
+    "area": 653958061342,
+    "satoshi": 446896,
+    "address": "bc1qsl9r9sz0jqqdkwxatpfygvwfs8g8468uxg5s4z",
+    "transaction": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+    "message": "Hello World",
+    "url": "https://bitcoin.org"
+}
+                            </pre>
+                        </code>
+                        <p>Field guidelines:
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>transaction: </b>Your purchase transaction</li>
+                                <li class="list-group-item"><b>message: </b>Your purchase transaction</li>
+                                <li class="list-group-item"><b>url: </b>A valid website url link</li>
+                            </ul>
+                        </p>
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Compare & pull request</div>
+                        <p>Click on "Compare & Pull Request" option and in the "Description" field paste/drag and drop/upload your map picture - your image will be formatted to a web friendly format/size when it goes live. 
+                            OR If you would like to see what it looks like, you can upload image file (name of the file should be {countryID.jpg}) to the <a href="https://github.com/SatsWorld/SatsWorld/tree/main/country-images">'country-images'</a> folder and run it locally on your computer.</p>
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">It's alive!</div>
+                        <p>Once your pull request is reviewed and merged, your ownership information will appear on the site for the world to see forever!</p>
+                        <div class="text-center">
+                            <img class="img-fluid" src="/usa-example.jpg" />
+                        </div>
+                      </div>
+                    </li>
+                  </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div id="countryModalFooter"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END INSTRUCTION MODAL -->
+ <!-- START COUNTRY LIST MODAL -->
+<div class="modal fade modal-md" id="countryListModal" aria-labelledby="countryListModalStaticBackdropLabel" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5">Country List</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="countryListModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END COUNTRY LIST MODAL -->
+<script src="leaflet.js"></script>
+<script src="leaflet-polygon.fillPattern.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="script.js" type="module"></script>
+</body>
+</html>
